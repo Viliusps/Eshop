@@ -1,0 +1,52 @@
+.details {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 55%;
+  min-width: 350px;
+  margin: 50px auto;
+  box-shadow: 2px 8px 20px #bdbdbd;
+}
+.details img {
+  max-width: 600px;
+  min-width: 290px;
+  height: 300px;
+  display: block;
+  object-fit: cover;
+  margin: 25px;
+}
+.details .box {
+  position: relative;
+  max-width: 500px;
+  min-width: 400px;
+  margin: 25px;
+  min-height: 310px;
+}
+.box .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.box .row h2 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.box .row span {
+  color: crimson;
+  font-size: 32px;
+}
+.box p {
+  line-height: 1.5;
+  margin: 15px 0;
+}
+.back-button {
+  box-shadow: 2px 3px 6px #bdbdbd;
+  top: 15px;
+  left: 10px;
+}
+.box .cart {
+  position: absolute;
+  bottom: 0;
+  box-shadow: 2px 3px 6px #bdbdbd;
+  right: 0;
+}
