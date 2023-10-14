@@ -28,14 +28,17 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         )
     List<Integer> getCommentsLikedOrDislikedByUser(Long userId, Long productId, String state);
 
-    @Query
+    @Query(value = """
+        SELECT c.*, COALESCE(l.likeCount, 0) AS likeCount
+        FROM comments c
+        JOIN users u ON c.user_id = u.id
+        LEFT JOIN
         (
-        value = "SELECT c.*, COALESCE(l.likeCount, 0) AS likeCount " +
-        "FROM comments c JOIN users u ON c.user_id = u.id LEFT JOIN " +
-        "(SELECT comment_id, COALESCE(SUM(CASE WHEN status = 'LIKE' THEN 1 " +
-        "WHEN status = 'DISLIKE' THEN -1 ELSE 0 END), 0) AS likeCount FROM reactions " +
-        "GROUP BY comment_id) l ON c.id = l.comment_id WHERE c.product_id = :id ORDER BY c.date DESC",
-        nativeQuery = true
-        )
+            SELECT comment_id, 
+            COALESCE(SUM(CASE WHEN status = 'LIKE' THEN 1 WHEN status = 'DISLIKE' THEN -1 ELSE 0 END), 0) AS likeCount
+            FROM reactions
+            GROUP BY comment_id
+        ) l ON c.id = l.comment_id WHERE c.product_id = :id ORDER BY c.date DESC
+    """, nativeQuery = true)
     List<Comment> getCommentsByProduct(Long id);
 }
