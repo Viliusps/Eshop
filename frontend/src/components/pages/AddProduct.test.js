@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import AddProduct from './AddProduct';
-import * as productsAxios from '../api/products-axios';
+import * as productsAxios from '../api/__mocks__/products-axios';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -9,15 +9,15 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({ pathname: 'mocked-path' })
 }));
 
-jest.mock('axios');
-
-jest.mock('../api/products-axios', () => ({
-  addProduct: jest.fn().mockResolvedValue({})
-}));
-
-jest.mock('../api/users-axios', () => ({
-  getID: jest.fn(() => Promise.resolve('mockedUserId'))
-}));
+// jest.mock('axios');
+//
+// jest.mock('../api/products-axios', () => ({
+//   addProduct: jest.fn().mockResolvedValue({})
+// }));
+//
+// jest.mock('../api/users-axios', () => ({
+//   getID: jest.fn(() => Promise.resolve('mockedUserId'))
+// }));
 
 describe('AddProduct Component', () => {
   it('should validate and submit the form correctly', async () => {
