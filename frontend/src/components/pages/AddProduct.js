@@ -125,6 +125,7 @@ export default function AddProduct() {
             </Title>
             <br />
             <TextInput
+              data-testid="Prekės pavadinimas"
               label="Prekės pavadinimas"
               placeholder="Prekės pavadinimas"
               onChange={(e) => {
@@ -135,6 +136,7 @@ export default function AddProduct() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <TextInput
+              data-testid="Prekės kaina"
               type="number"
               label="Prekės kaina"
               placeholder="Prekės kaina"
@@ -149,6 +151,7 @@ export default function AddProduct() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <Select
+              data-testid="Prekės būklė"
               label="Prekės būklė"
               placeholder="Pasirinkite"
               data={['Neveikianti', 'Mažai naudota', 'Naudota', 'Nauja']}
@@ -160,6 +163,7 @@ export default function AddProduct() {
               required
             />
             <Select
+              data-testid="Kategorija"
               label="Kategorija"
               placeholder="Pasirinkite"
               data={Object.values(productCategories)}
@@ -171,6 +175,7 @@ export default function AddProduct() {
               required
             />
             <TextInput
+              data-testid="Miestas"
               label="Miestas"
               placeholder="Miestas"
               error={cityError}
@@ -188,6 +193,7 @@ export default function AddProduct() {
                 setDescriptionError('');
                 setDescription(e.target.value);
               }}
+              data-testid="Prekės aprašymas"
               placeholder="Prekės aprašymas"
               label="Aprašymas"
               autosize
