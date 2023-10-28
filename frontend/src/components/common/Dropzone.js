@@ -19,6 +19,7 @@ export function ImageDropzone({ onImageUpload, imageError, defaultImage, imageSr
 
   return (
     <Dropzone
+      data-testId="prekes_nuotrauka"
       style={{
         width: '300px',
         height: '300px',

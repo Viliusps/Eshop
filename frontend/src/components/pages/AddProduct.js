@@ -60,11 +60,6 @@ export default function AddProduct() {
       valid = false;
     }
 
-    if (image === null) {
-      setImageError('Įkelkite prekės nuotrauką');
-      valid = false;
-    }
-
     if (city === '') {
       setCityError('Pasirinkite miestą');
       valid = false;
@@ -125,6 +120,7 @@ export default function AddProduct() {
             </Title>
             <br />
             <TextInput
+              data-testid="prekes_pavadinimas"
               label="Prekės pavadinimas"
               placeholder="Prekės pavadinimas"
               onChange={(e) => {
@@ -135,6 +131,7 @@ export default function AddProduct() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <TextInput
+              data-testid="prekes_kaina"
               type="number"
               label="Prekės kaina"
               placeholder="Prekės kaina"
@@ -149,6 +146,7 @@ export default function AddProduct() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <Select
+              data-testid="prekes_bukle"
               label="Prekės būklė"
               placeholder="Pasirinkite"
               data={['Neveikianti', 'Mažai naudota', 'Naudota', 'Nauja']}
@@ -160,6 +158,7 @@ export default function AddProduct() {
               required
             />
             <Select
+              data-testid="kategorija"
               label="Kategorija"
               placeholder="Pasirinkite"
               data={Object.values(productCategories)}
@@ -171,6 +170,7 @@ export default function AddProduct() {
               required
             />
             <TextInput
+              data-testid="miestas"
               label="Miestas"
               placeholder="Miestas"
               error={cityError}
@@ -188,6 +188,7 @@ export default function AddProduct() {
                 setDescriptionError('');
                 setDescription(e.target.value);
               }}
+              data-testid="prekes_aprasymas"
               placeholder="Prekės aprašymas"
               label="Aprašymas"
               autosize

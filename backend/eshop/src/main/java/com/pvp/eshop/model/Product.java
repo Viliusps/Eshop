@@ -63,6 +63,7 @@ public class Product {
 
     @Column(name = "category")
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Category is mandatory")
     private ProductCategory category;
 
     @Column(name = "image_url")

@@ -31,6 +31,7 @@ export default function App() {
       setRole(data);
       if (data !== 'GUEST') {
         //refreshes token
+        //(does not work lmao)
         getID().then((data1) => {
           getUser(data1).then((data2) => {
             refreshToken(data2.username)

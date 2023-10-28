@@ -3,7 +3,6 @@ version: "3.1"
 services:
   db:
     image: postgres
-    restart: always
     ports:
       - 5432:5432
     environment:
@@ -12,5 +11,16 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - db:/var/lib/postgresql/data
+  testDb:
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
 volumes:
   db:
+  testDb:
