@@ -41,7 +41,7 @@ public class Location {
     @Column(name = "lattitude", nullable = false)
     private String lattitude;
 
-    @Column(name = "city", nullable = true)
+    @Column(name = "city")
     private String city;
 
     @NotBlank(message = "State is mandatory")
