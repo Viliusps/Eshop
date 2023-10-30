@@ -54,7 +54,4 @@ class CommentsServiceTest {
 
         assertThat(response.getText()).isEqualTo("TestText");
     }
-
-    // Q: How do I zoom in text in IntelliJ?
-    // A: Ctrl + Shift + A, then type "zoom" and select "Increase font size (Zoom In)"
 }
