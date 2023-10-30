@@ -223,6 +223,7 @@ export default function EditProduct() {
               </Title>
               <br />
               <Switch
+                data-testid="paslepti"
                 checked={checked}
                 label="Paslėpti?"
                 description="Paslėpta prekė tampa nematoma kitiems svetainės naudotojams"
@@ -231,6 +232,7 @@ export default function EditProduct() {
                 }}
               />
               <TextInput
+                data-testid="prekes_pavadinimas"
                 label="Prekės pavadinimas"
                 placeholder="Prekės pavadinimas"
                 value={name}
@@ -242,6 +244,7 @@ export default function EditProduct() {
                 onInput={(e) => e.target.setCustomValidity('')}
               />
               <TextInput
+                data-testid="prekes_kaina"
                 type="number"
                 label="Prekės kaina"
                 placeholder="Prekės kaina"
@@ -257,6 +260,7 @@ export default function EditProduct() {
                 onInput={(e) => e.target.setCustomValidity('')}
               />
               <Select
+                data-testid="prekes_bukle"
                 label="Prekės būklė"
                 placeholder="Pasirinkite"
                 value={status}
@@ -265,6 +269,7 @@ export default function EditProduct() {
                 required
               />
               <Select
+                data-testid="kategorija"
                 label="Kategorija"
                 placeholder="Pasirinkite"
                 data={Object.values(productCategories)}
@@ -289,6 +294,7 @@ export default function EditProduct() {
                 </>
               ) : null}
               <TextInput
+                data-testid="miestas"
                 label="Miestas"
                 placeholder="Miestas"
                 value={city}
@@ -307,6 +313,7 @@ export default function EditProduct() {
                   setDescriptionError('');
                   setDescription(e.target.value);
                 }}
+                data-testid="prekes_aprasymas"
                 placeholder="Prekės aprašymas"
                 label="Aprašymas"
                 autosize

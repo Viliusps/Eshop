@@ -8,11 +8,11 @@ import {
   Button,
   Title
 } from '@mantine/core';
-import { login } from '../api/token-axios';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+// eslint-disable-next-line react/prop-types
+export default function Login({ login }) {
   const formRef = useRef();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -57,6 +57,7 @@ export default function Login() {
         </Title>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <TextInput
+            data-testid="vartotojo_vardas"
             label="Vartotojo vardas"
             placeholder="Vartotojo vardas"
             onChange={handleUsernameChange}
@@ -74,6 +75,7 @@ export default function Login() {
             required
           />
           <PasswordInput
+            data-testid="slaptazodis"
             label="Slaptažodis"
             placeholder="Jūsų slaptažodis"
             required
@@ -83,6 +85,7 @@ export default function Login() {
             onInput={(e) => e.target.setCustomValidity('')}
           />
           <Button
+            data-testid="prisijungti"
             fullWidth
             mt="xl"
             onClick={() => (formRef.current.reportValidity() ? handleClick() : null)}>

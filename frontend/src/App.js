@@ -21,6 +21,8 @@ import AddProduct from './components/pages/AddProduct';
 import { refreshToken } from './components/api/token-axios';
 import ProductWishlist from './components/pages/ProductWishlist';
 import Rules from './components/pages/Rules';
+import { register, login } from './components/api/token-axios';
+import { updateUser } from './components/api/users-axios';
 
 export default function App() {
   const location = useLocation();
@@ -57,8 +59,8 @@ export default function App() {
         <ToastContainer />
         <Routes>
           <Route element={<Auth check={role === 'GUEST'} />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login login={login} />} />
+            <Route path="/register" element={<Register register={register} />} />
           </Route>
 
           <Route element={<Auth check={role === 'ADMIN'} />}>
@@ -69,7 +71,7 @@ export default function App() {
           </Route>
 
           <Route element={<Auth check={role !== 'GUEST'} />}>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile updateUser={updateUser} />} />
             <Route path="/my-products" element={<MyProducts />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/my-products/:id" element={<EditProduct />} />

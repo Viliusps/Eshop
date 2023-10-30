@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import AddProduct from './AddProduct';
-import * as userAxios from '../api/__mocks__/users-axios';
 import user from '@testing-library/user-event';
+import { getID } from '../api/__mocks__/users-axios';
 
 describe('AddProduct Component', () => {
   it('should submit the form correctly', async () => {
@@ -23,7 +23,7 @@ describe('AddProduct Component', () => {
     fireEvent.click(screen.getByText('Išsaugoti'));
 
     await waitFor(() => {
-      expect(userAxios.getID()).resolves.toEqual('mockedUserId');
+      expect(getID()).resolves.toEqual('mockedUserId');
     });
   });
 });

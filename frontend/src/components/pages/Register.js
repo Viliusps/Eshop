@@ -10,11 +10,11 @@ import {
   Stack
 } from '@mantine/core';
 import { useRef, useState } from 'react';
-import { register } from '../api/token-axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-export default function Register() {
+// eslint-disable-next-line react/prop-types
+export default function Register({ register }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -122,6 +122,7 @@ export default function Register() {
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <Stack>
             <TextInput
+              data-testid="vartotojo_vardas"
               label="Vartotojo vardas"
               placeholder="Vartotojo vardas"
               onChange={handleUsernameChange}
@@ -131,6 +132,7 @@ export default function Register() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <TextInput
+              data-testid="el_pastas"
               label="El. paštas"
               placeholder="you@gmail.com"
               onChange={handleEmailChange}
@@ -140,6 +142,7 @@ export default function Register() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <TextInput
+              data-testid="tel_nr"
               label="Tel. nr."
               placeholder="+37066666666"
               onChange={handlePhoneChange}
@@ -149,6 +152,7 @@ export default function Register() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <PasswordInput
+              data-testid="slaptazodis"
               label="Slaptažodis"
               placeholder="Jūsų slaptažodis"
               onChange={handlePasswordChange}
@@ -158,6 +162,7 @@ export default function Register() {
               onInput={(e) => e.target.setCustomValidity('')}
             />
             <PasswordInput
+              data-testid="patvirtinti_slaptazodi"
               label="Patvirtinti slaptažodį"
               placeholder="Patvirtinti slaptažodį"
               onChange={handleConfPasswordChange}
@@ -168,6 +173,7 @@ export default function Register() {
             />
           </Stack>
           <Button
+            data-testid="registruotis"
             fullWidth
             mt="xl"
             onClick={() => (formRef.current.reportValidity() ? handleClick() : null)}>
