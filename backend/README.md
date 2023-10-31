@@ -24,3 +24,8 @@ Over the `Configuration file` section you can enable `Treat Checkstyle errors as
 To add Checkstyle, go to `Extensions` and install `Checkstyle for Java` plugin.
 To add local configuration right click on `checkstyle.xml` file and click
 `Set the Checkstyle Configuration File`. In `.vscode->settings.json` add `"java.checkstyle.version": "8.43"`.
+
+### Testing
+Use `mvn test` to run all tests.
+Use `mvn verify` to generate jacoco coverage report. The report can be found
+in `backend/eshop/target/site/jacoco/index.html`
