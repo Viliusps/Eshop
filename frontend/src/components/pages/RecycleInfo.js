@@ -41,11 +41,12 @@ export default function RecycleInfo() {
         <h2 style={{ margin: 'auto', width: '90%', textAlign: 'center' }}>
           Elektroninių įrenginių ir jų komponentų rūšiavimo vietos Lietuvoje
         </h2>
-        <p style={{ textAlign: 'left' }}>
+        <p data-testid="nepavyko" style={{ textAlign: 'left' }}>
           Nepavyko parduoti prekės? Šiame žemėlapyje pažymėtos atliekų rūšiavimo vietos, kuriose
           galite palikti savo įrenginį ar įrenginio dalį. Daugiau informacijos galite rasti
           apsilankę adresu{' '}
           <Anchor
+            data-testid="button"
             component="button"
             type="button"
             onClick={() =>
