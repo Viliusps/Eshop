@@ -23,7 +23,11 @@ import ProductWishlist from './components/pages/ProductWishlist';
 import Rules from './components/pages/Rules';
 import { register, login } from './components/api/token-axios';
 import { updateUser } from './components/api/users-axios';
-import { getProductImage, getWishlistProductsByUserID } from './components/api/products-axios.js';
+import {
+  getProductImage,
+  getWishlistProductsByUserID,
+  deleteProduct
+} from './components/api/products-axios.js';
 
 export default function App() {
   const location = useLocation();
@@ -66,7 +70,10 @@ export default function App() {
 
           <Route element={<Auth check={role === 'ADMIN'} />}>
             <Route path="/edit-products" element={<AllEditProducts />} />
-            <Route path="/edit-products/:id" element={<EditProduct />} />
+            <Route
+              path="/edit-products/:id"
+              element={<EditProduct deleteProduct={deleteProduct} />}
+            />
             <Route path="/users" element={<AllUsers />} />
             <Route path="/users/:id" element={<EditUser />} />
           </Route>

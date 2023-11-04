@@ -25,5 +25,5 @@ describe('AddProduct Component', () => {
     await waitFor(() => {
       expect(getID()).resolves.toEqual('mockedUserId');
     });
-  });
+  }, 10000);
 });

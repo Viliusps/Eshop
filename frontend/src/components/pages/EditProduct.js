@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { deleteProduct, getProduct, updateProduct, getProductImage } from '../api/products-axios';
+import { getProduct, updateProduct, getProductImage } from '../api/products-axios';
 import { Button, Divider, Modal, Select, Textarea, TextInput, Title } from '@mantine/core';
 import { IconCheck, IconCircleX, IconCurrencyEuro, IconTrash } from '@tabler/icons-react';
 import { getID, getRole, getUser } from '../api/users-axios';
@@ -39,7 +39,8 @@ const Approve = styled(Button)`
   margin-top: 10px;
 `;
 
-export default function EditProduct() {
+// eslint-disable-next-line react/prop-types
+export default function EditProduct({ deleteProduct }) {
   const [category, setCategory] = useState('');
   const [imageError, setImageError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -124,16 +125,6 @@ export default function EditProduct() {
 
   function handleSubmit() {
     let valid = true;
-
-    if (category === '') {
-      setCategoryError('Pasirinkite prekės kategoriją');
-      valid = false;
-    }
-
-    if (description === '') {
-      setDescriptionError('Aprašymas negali būti tuščias');
-      valid = false;
-    }
 
     if (price < 0) {
       setPriceError('Kaina turi būti teigiama');
@@ -339,6 +330,7 @@ export default function EditProduct() {
                 Atšaukti
               </StyledButton>
               <StyledButton
+                data-testid="istrinti"
                 className="button"
                 leftIcon={<IconTrash />}
                 color="red"
@@ -361,7 +353,13 @@ export default function EditProduct() {
             </div>
           </div>
         </form>
-        <Modal opened={opened} onClose={close} withCloseButton={false} xOffset="0vh" centered>
+        <Modal
+          data-testid="modal"
+          opened={opened}
+          onClose={close}
+          withCloseButton={false}
+          xOffset="0vh"
+          centered>
           <h2 style={{ textAlign: 'center' }}>
             Ar tikrai norite ištrinti
             <br />

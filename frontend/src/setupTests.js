@@ -15,6 +15,6 @@ jest.mock('./components/api/wishlist-axios.js');
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => () => {},
+  useNavigate: () => jest.fn(),
   useLocation: () => ({ pathname: 'mocked-path' })
 }));
