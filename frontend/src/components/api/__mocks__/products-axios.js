@@ -46,3 +46,22 @@ export const getWishlistProductsByUserID = async () => {
     }
   ]);
 };
+
+export const filterProducts = async () => {
+  return Promise.resolve(
+    Array.from({ length: 30 }, (_, i) => ({
+      id: i + 1,
+      name: `Product ${i + 1}`,
+      price: (i + 1) * 10,
+      status: 'In Stock'
+    }))
+  );
+};
+
+export const findMaxPrice = async () => {
+  return Promise.resolve(1000);
+};
+
+export const findMinPrice = async () => {
+  return Promise.resolve(10);
+};
