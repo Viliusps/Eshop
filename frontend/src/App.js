@@ -23,6 +23,7 @@ import ProductWishlist from './components/pages/ProductWishlist';
 import Rules from './components/pages/Rules';
 import { register, login } from './components/api/token-axios';
 import { updateUser } from './components/api/users-axios';
+import { getProductImage, getWishlistProductsByUserID } from './components/api/products-axios.js';
 
 export default function App() {
   const location = useLocation();
@@ -75,7 +76,15 @@ export default function App() {
             <Route path="/my-products" element={<MyProducts />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/my-products/:id" element={<EditProduct />} />
-            <Route path="/wishlist" element={<ProductWishlist />} />
+            <Route
+              path="/wishlist"
+              element={
+                <ProductWishlist
+                  getWishlistProductsByUserID={getWishlistProductsByUserID}
+                  getProductImage={getProductImage}
+                />
+              }
+            />
           </Route>
 
           <Route path="/product" element={<Products />} />
