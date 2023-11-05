@@ -23,15 +23,21 @@ export const getAllUsers = async () => {
   return Promise.resolve([
     {
       id: 'mockedUserId',
-      username: 'MockUsername',
+      username: 'Test1',
       email: 'mock@email.com',
-      phone: '+11111111111'
+      phone: '+11111111111',
+      role: 'USER'
     },
     {
       id: 'mockedUserId2',
-      username: 'MockUsername2',
-      email: 'moc2k@email.com',
-      phone: '+11211111111'
+      username: 'Test2',
+      email: 'mock2@email.com',
+      phone: '+11211111111',
+      role: 'ADMIN'
     }
   ]);
+};
+
+export const adminUpdateUser = async () => {
+  return Promise.resolve();
 };

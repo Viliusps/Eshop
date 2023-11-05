@@ -22,7 +22,7 @@ import { refreshToken } from './components/api/token-axios';
 import ProductWishlist from './components/pages/ProductWishlist';
 import Rules from './components/pages/Rules';
 import { register, login } from './components/api/token-axios';
-import { updateUser, adminUpdateUser } from './components/api/users-axios';
+import { updateUser, adminUpdateUser, deleteUser } from './components/api/users-axios';
 import {
   getProductImage,
   getWishlistProductsByUserID,
@@ -69,12 +69,15 @@ export default function App() {
           </Route>
 
           <Route element={<Auth check={role === 'ADMIN'} />}>
-            <Route path="/edit-products" element={<AllEditProducts />} />
+            <Route
+              path="/edit-products"
+              element={<AllEditProducts deleteProduct={deleteProduct} />}
+            />
             <Route
               path="/edit-products/:id"
               element={<EditProduct deleteProduct={deleteProduct} />}
             />
-            <Route path="/users" element={<AllUsers />} />
+            <Route path="/users" element={<AllUsers deleteUser={deleteUser} />} />
             <Route path="/users/:id" element={<EditUser adminUpdateUser={adminUpdateUser} />} />
           </Route>
 

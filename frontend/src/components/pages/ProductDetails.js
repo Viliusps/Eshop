@@ -95,6 +95,7 @@ export default function ProductDetails() {
           {role !== 'GUEST' && !isOwnProduct ? (
             wishlistExists ? (
               <Button
+                data-testid="istrinti"
                 variant="filled"
                 color="violet"
                 style={{ float: 'right' }}
@@ -106,6 +107,7 @@ export default function ProductDetails() {
               </Button>
             ) : (
               <Button
+                data-testid="prideti"
                 variant="outline"
                 color="violet"
                 style={{ float: 'right' }}

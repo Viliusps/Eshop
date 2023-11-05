@@ -10,7 +10,7 @@ export const getProduct = async () => {
     category: 'PHONES',
     city: 'Example City',
     description: 'This is a mock description',
-    user_id: 'mockedUserId',
+    user_id: 'mockedUserId3',
     hidden: false
   };
 
@@ -67,6 +67,31 @@ export const findMinPrice = async () => {
 };
 
 export const getProductByUser = async () => {
+  return Promise.resolve([
+    {
+      name: 'Mock nr1',
+      price: 12.34,
+      status: 'Nauja',
+      category: 'PHONES',
+      city: 'Example City',
+      description: 'This is a mock description',
+      user_id: 'mockedUserId',
+      hidden: false
+    },
+    {
+      name: 'Mock nr2',
+      price: 50.99,
+      status: 'Sena',
+      category: 'PHONES',
+      city: 'Example City',
+      description: 'This is a mock description',
+      user_id: 'mockedUserId',
+      hidden: false
+    }
+  ]);
+};
+
+export const getProducts = async () => {
   return Promise.resolve([
     {
       name: 'Mock nr1',

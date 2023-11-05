@@ -7,5 +7,5 @@ export const deleteWishlistProduct = async () => {
 };
 
 export const wishlistProductExists = async () => {
-  return Promise.resolve(true);
+  return Promise.resolve(false);
 };

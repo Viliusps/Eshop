@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import ProductDetails from './ProductDetails';
 
 describe('ProductDetails Component', () => {
@@ -25,6 +25,23 @@ describe('ProductDetails Component', () => {
       expect(
         screen.getByText("Good value for the money. I'm satisfied with my purchase.")
       ).toBeInTheDocument();
+    });
+  });
+
+  it('should add to the wishlist and remove', async () => {
+    render(<ProductDetails />);
+    await waitFor(() => {
+      expect(screen.getByText('Mock product')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId('prideti'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('istrinti')).toBeInTheDocument();
+      fireEvent.click(screen.getByTestId('istrinti'));
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('prideti')).toBeInTheDocument();
     });
   });
 });
