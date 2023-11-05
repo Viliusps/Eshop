@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
 import java.util.Date;
@@ -76,6 +77,25 @@ public class ReactionControllerTest {
     }
 
     @Test
+    void likeOrDislikeComment_whenMethodIsExecuted_shouldReturnCreatedStatus() {
+        var user = User.builder().username("TestUsername").email("TestEmail@gmail.com").password("TestPassword").phone("TestPhone").role(Role.ADMIN).build();
+        var userResponse = userRepository.save(user);
+
+        var product = Product.builder().name("TestName").status("TestStatus").description("TestDescription").price(1f).createdAt(Instant.now()).user_id(userResponse.getId()).category(ProductCategory.CAMERAS).build();
+        var productResponse = productRepository.save(product);
+
+        var comment = Comment.builder().date(new Date(3)).user_id(user.getId()).product_id(productResponse.getId()).text("First comment").build();
+        var commentResponse = commentRepository.save(comment);
+
+        var request = Reaction.builder().comment_id(commentResponse.getId()).user_id(userResponse.getId()).status(ReactionState.LIKE).build();
+        reactionRepository.save(request);
+        var response = restTemplate.postForEntity("/api/v1/reactions/likes", request, Reaction.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
     void getCommentsLikedOrDislikedByUser_whenReactionsArePresent_shouldReturnThemByUser() {
         var user = User.builder().username("TestUsername").email("TestEmail@gmail.com").password("TestPassword").phone("TestPhone").role(Role.ADMIN).build();
         var userResponse = userRepository.save(user);
@@ -100,5 +120,30 @@ public class ReactionControllerTest {
         assertThat(object).isNotNull();
         assertThat(object.length).isEqualTo(1);
         assertThat(object[0]).isEqualTo(commentResponse.getId());
+    }
+
+    @Test
+    void getCommentsLikedOrDislikedByUser_whenReactionsArePresent_shouldReturnOkStatus() {
+        var user = User.builder().username("TestUsername").email("TestEmail@gmail.com").password("TestPassword").phone("TestPhone").role(Role.ADMIN).build();
+        var userResponse = userRepository.save(user);
+
+        var product = Product.builder().name("TestName").status("TestStatus").description("TestDescription").price(1f).createdAt(Instant.now()).user_id(userResponse.getId()).category(ProductCategory.CAMERAS).build();
+        var productResponse = productRepository.save(product);
+
+        var comment = Comment.builder().date(new Date(3)).user_id(user.getId()).product_id(productResponse.getId()).text("First comment").build();
+        var commentResponse = commentRepository.save(comment);
+
+        var reaction = Reaction.builder().comment_id(commentResponse.getId()).user_id(userResponse.getId()).status(ReactionState.LIKE).build();
+        reactionRepository.save(reaction);
+
+        var request = new HashMap<String, Object>();
+        request.put("user_id", userResponse.getId());
+        request.put("product_id", productResponse.getId());
+        request.put("status", ReactionState.LIKE);
+
+        var response = restTemplate.postForEntity("/api/v1/reactions/likedByUser", request, Integer[].class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

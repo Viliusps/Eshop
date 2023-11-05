@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -40,6 +41,21 @@ public class LocationsControllerTest {
     }
 
     @Test
+    void getAllLocations_whenLocationsArePresent_shouldReturnOkStatus() {
+        var locations = List.of(
+                Location.builder().address("Test address1").company("Test company1").longitude("1").lattitude("11").city("Test city1").state("Test state1").build(),
+                Location.builder().address("Test address2").company("Test company2").longitude("2").lattitude("22").city("Test city2").state("Test state2").build(),
+                Location.builder().address("Test address3").company("Test company3").longitude("3").lattitude("33").city("Test city3").state("Test state3").build()
+        );
+        locationRepository.saveAll(locations);
+
+        var response = restTemplate.getForEntity("/api/v1/locations", Location[].class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
     void getAllFirms_whenFirmsArePresent_shouldCorrectlyReturnAllFirms() {
         var locations = List.of(
                 Location.builder().address("Test address1").company("Test company1").longitude("1").lattitude("11").city("Test city1").state("Test state1").build(),
@@ -53,6 +69,21 @@ public class LocationsControllerTest {
 
         assertThat(object).isNotNull();
         assertThat(object.length).isEqualTo(2);
+    }
+
+    @Test
+    void getAllFirms_whenFirmsArePresent_shouldReturnOkStatus() {
+        var locations = List.of(
+                Location.builder().address("Test address1").company("Test company1").longitude("1").lattitude("11").city("Test city1").state("Test state1").build(),
+                Location.builder().address("Test address2").company("Test company2 (GYVENTOJAMS)").longitude("2").lattitude("22").city("Test city2").state("Test state2").build(),
+                Location.builder().address("Test address3").company("Test company3").longitude("3").lattitude("33").city("Test city3").state("Test state3").build()
+        );
+        locationRepository.saveAll(locations);
+
+        var response = restTemplate.getForEntity("/api/v1/locations/firms", Location[].class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
@@ -71,4 +102,18 @@ public class LocationsControllerTest {
         assertThat(object.length).isEqualTo(1);
     }
 
+    @Test
+    void getAllSites_whenSitesArePresent_shouldReturnOkStatus() {
+        var locations = List.of(
+                Location.builder().address("Test address1").company("Test company1").longitude("1").lattitude("11").city("Test city1").state("Test state1").build(),
+                Location.builder().address("Test address2").company("Test company2 (GYVENTOJAMS)").longitude("2").lattitude("22").city("Test city2").state("Test state2").build(),
+                Location.builder().address("Test address3").company("Test company3").longitude("3").lattitude("33").city("Test city3").state("Test state3").build()
+        );
+        locationRepository.saveAll(locations);
+
+        var response = restTemplate.getForEntity("/api/v1/locations/sites", Location[].class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }
