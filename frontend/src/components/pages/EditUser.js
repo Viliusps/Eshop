@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { adminUpdateUser, getUser } from '../api/users-axios';
+import { getUser } from '../api/users-axios';
 import { Button, Container, Select, Stack, TextInput, Title } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingWrapper from '../common/LoadingWrapper';
 
-export default function EditUser() {
+// eslint-disable-next-line react/prop-types
+export default function EditUser({ adminUpdateUser }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const formRef = useRef();
@@ -113,6 +114,7 @@ export default function EditUser() {
               <Stack>
                 <TextInput label="Vartotojo vardas" value={username} disabled />
                 <TextInput
+                  data-testid="el_pastas"
                   label="Naujas el. paštas"
                   placeholder="you@gmail.com"
                   value={email}
@@ -123,6 +125,7 @@ export default function EditUser() {
                   onInput={(e) => e.target.setCustomValidity('')}
                 />
                 <TextInput
+                  data-testid="tel_nr"
                   label="Naujas tel. nr."
                   placeholder="+37066666666"
                   value={phone}
@@ -133,6 +136,7 @@ export default function EditUser() {
                   onInput={(e) => e.target.setCustomValidity('')}
                 />
                 <Select
+                  data-testid="role"
                   label="Naudotojo rolė"
                   placeholder="Pasirinkite"
                   value={role}

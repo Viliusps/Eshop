@@ -125,19 +125,19 @@ export default function ProductDetails() {
             <span>${product.price}</span>
           </div>
           <b>Būklė: </b>
-          {product.status}
+          <p>{product.status}</p>
           <br />
           <br />
           <b>Pardavėjo duomenys: </b>
           <br />
-          {user.username}
+          <p>{user.username}</p>
           <br />
-          {user.email}
+          <p>{user.email}</p>
           <br />
-          {user.phone}
+          <p>{user.phone}</p>
           <br />
           <b>Miestas: </b>
-          {product.city}
+          <p>{product.city}</p>
         </div>
         <div className="box">
           <h2>Aprašymas:</h2>
