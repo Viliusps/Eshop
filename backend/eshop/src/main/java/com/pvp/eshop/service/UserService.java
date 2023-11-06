@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
 
+import com.pvp.eshop.model.Role;
 import com.pvp.eshop.model.User;
 import com.pvp.eshop.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,6 +47,7 @@ public class UserService {
         newUser.setPassword(hash);
         newUser.setPhone(user.getPhone());
         newUser.setProducts(user.getProducts());
+        newUser.setRole(Role.USER);
         return userRepository.save(newUser);
     }
 

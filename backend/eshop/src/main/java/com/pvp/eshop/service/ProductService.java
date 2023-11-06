@@ -7,13 +7,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.pvp.eshop.config.Generated;
 import com.pvp.eshop.model.Product;
 import com.pvp.eshop.model.requests.FilterRequest;
 import com.pvp.eshop.model.requests.ProductRequest;
 import com.pvp.eshop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 
 @Service
 public class ProductService {
@@ -103,8 +103,9 @@ public class ProductService {
         return productRepository.save(saved);
     }
 
+    @Generated
     public void uploadFile(String uploadDir, MultipartFile file) {
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             try {
                 String realPathToUploads = new File(uploadDir).getAbsolutePath();
                 if (!new File(realPathToUploads).exists()) {
@@ -136,9 +137,11 @@ public class ProductService {
         productFromDb.setCity(product.getCity());
         productFromDb.setHidden(product.isHidden());
         String imagePath = productFromDb.getImageUrl();
-        File file = new File(imagePath);
-        if (file.exists()) {
-            deleteRecursive(file);
+        if (imagePath!=null) {
+            File file = new File(imagePath);
+            if (file.exists()) {
+                deleteRecursive(file);
+            }
         }
         MultipartFile newImage = product.getImage();
         uploadFile(imagePath, newImage);
@@ -146,13 +149,17 @@ public class ProductService {
     }
     public void deleteProduct(Long id) {
         String folderPath = productRepository.findById(id).get().getImageUrl();
-        File folder = new File(folderPath);
-        if (folder.exists()) {
-            deleteRecursive(folder);
+        if (folderPath != null) {
+            File folder = new File(folderPath);
+            if (folder.exists()) {
+                deleteRecursive(folder);
+            }
         }
+
         productRepository.deleteById(id);
     }
 
+    @Generated
     private void deleteRecursive(File file) {
         if (file.isDirectory()) {
             File[] children = file.listFiles();
@@ -172,6 +179,7 @@ public class ProductService {
         return productRepository.findMinPrice();
     }
 
+    @Generated
     public byte[] getImageFile(String path) throws IOException {
         File folder = new File(path);
         File[] files = folder.listFiles();
