@@ -53,6 +53,7 @@ export default function EditProduct({ deleteProduct }) {
   const [price, setPrice] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [categoryError, setCategoryError] = useState('');
+  const [cityError, setCityError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [user, setUser] = useState([]);
   const [image, setImage] = useState(null);
@@ -125,6 +126,7 @@ export default function EditProduct({ deleteProduct }) {
 
   function handleSubmit() {
     let valid = true;
+    let regCity = /^[^\d\s!@#$%^&*()+\\[\]{};:'"|\\,.\\/<>?`~=_]+$/;
 
     if (price < 0) {
       setPriceError('Kaina turi būti teigiama');
@@ -133,6 +135,10 @@ export default function EditProduct({ deleteProduct }) {
 
     if (price > 10000) {
       setPriceError('Kaina negali būti didesnė nei 10000 Eur');
+      valid = false;
+    }
+    if (!regCity.test(city)) {
+      setCityError('Neteisingai įvestas miestas');
       valid = false;
     }
 
@@ -289,6 +295,7 @@ export default function EditProduct({ deleteProduct }) {
                 label="Miestas"
                 placeholder="Miestas"
                 value={city}
+                error={cityError}
                 onChange={(e) => {
                   setCity(e.target.value);
                 }}
@@ -320,6 +327,7 @@ export default function EditProduct({ deleteProduct }) {
             </div>
             <div style={{ margin: 'auto' }}>
               <StyledButton
+                data-testid="atsaukti"
                 className="button"
                 leftIcon={<IconCircleX />}
                 color="indigo"

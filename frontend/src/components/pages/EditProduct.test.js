@@ -15,6 +15,9 @@ describe('EditProduct Component', () => {
     expect(screen.getByTestId('miestas').value).toEqual('Example City');
     expect(screen.getByTestId('prekes_aprasymas').value).toEqual('This is a mock description');
 
+    expect(screen.getByTestId('atsaukti')).toBeInTheDocument();
+    expect(screen.getByTestId('istrinti')).toBeInTheDocument();
+
     await waitFor(() => {
       expect(getID()).resolves.toEqual('mockedUserId');
       expect(getRole()).resolves.toEqual('mockedRole');
@@ -62,5 +65,78 @@ describe('EditProduct Component', () => {
     await waitFor(() => {
       expect(deleteProduct).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('should display error message when submitting with empty name', async () => {
+    render(<EditProduct />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    fireEvent.change(screen.getByTestId('prekes_pavadinimas'), {
+      target: { value: '' }
+    });
+    fireEvent.click(screen.getByText('Išsaugoti'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('prekes_pavadinimas').validationMessage).toBe(
+        'Įveskite prekės pavadinimą'
+      );
+    });
+  }, 10000);
+
+  it('should display error message when submitting with empty description', async () => {
+    render(<EditProduct />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    fireEvent.change(screen.getByTestId('prekes_aprasymas'), {
+      target: { value: '' }
+    });
+    fireEvent.click(screen.getByText('Išsaugoti'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('prekes_aprasymas').validationMessage).toBe(
+        'Įveskite prekės aprašymą'
+      );
+    });
+  }, 10000);
+
+  it('should display error message when submitting with an empty city', async () => {
+    render(<EditProduct />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    fireEvent.change(screen.getByTestId('miestas'), { target: { value: '' } });
+    fireEvent.click(screen.getByText('Išsaugoti'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('miestas').validationMessage).toBe('Įveskite miestą');
+    });
+  }, 10000);
+
+  it('should display error message when submitting with an invalid city', async () => {
+    render(<EditProduct />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    fireEvent.change(screen.getByTestId('miestas'), { target: { value: '123456' } });
+    fireEvent.click(screen.getByText('Išsaugoti'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Neteisingai įvestas miestas')).toBeInTheDocument();
+    });
+  }, 10000);
+
+  it('should toggle the Switch component', async () => {
+    render(<EditProduct />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const switchInput = screen.getByTestId('paslepti');
+
+    expect(switchInput).toHaveProperty('checked', false);
+
+    fireEvent.click(switchInput);
+
+    expect(switchInput).toHaveProperty('checked', true);
+
+    fireEvent.click(switchInput);
+
+    expect(switchInput).toHaveProperty('checked', false);
   });
 });

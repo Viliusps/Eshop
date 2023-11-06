@@ -93,7 +93,11 @@ export default function Login({ login }) {
           </Button>
           <Text align="center" mt="md">
             Neturite paskyros?{' '}
-            <Anchor href="#" weight={700} onClick={() => navigate('/register')}>
+            <Anchor
+              data-testid="registruotis"
+              href="#"
+              weight={700}
+              onClick={() => navigate('/register')}>
               Registruotis
             </Anchor>
           </Text>

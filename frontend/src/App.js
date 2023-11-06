@@ -77,7 +77,10 @@ export default function App() {
               path="/edit-products/:id"
               element={<EditProduct deleteProduct={deleteProduct} />}
             />
-            <Route path="/users" element={<AllUsers deleteUser={deleteUser} />} />
+            <Route
+              path="/users"
+              element={<AllUsers deleteUser={deleteUser} adminUpdateUser={adminUpdateUser} />}
+            />
             <Route path="/users/:id" element={<EditUser adminUpdateUser={adminUpdateUser} />} />
           </Route>
 

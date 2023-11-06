@@ -24,10 +24,46 @@ describe('AllUsers Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test1')).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId('istrinti'));
+      fireEvent.click(screen.getAllByTestId('istrinti')[0]);
     });
 
     await waitFor(() => fireEvent.click(screen.getByText('Patvirtinti')));
     await waitFor(() => expect(mockDeleteUser).toHaveBeenCalledTimes(1));
+  });
+
+  it('should block user', async () => {
+    const adminUpdateUser = jest.fn(() => Promise.resolve());
+    const mockDeleteUser = jest.fn(() => Promise.resolve());
+
+    render(<AllUsers deleteUser={mockDeleteUser} adminUpdateUser={adminUpdateUser} />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    fireEvent.click(screen.queryByTestId('blokuoti'));
+    expect(adminUpdateUser).toHaveBeenCalledWith(
+      'mockedUserId2',
+      'Test2',
+      'mock2@email.com',
+      '+11211111111',
+      'password2',
+      'BLOCKED'
+    );
+  });
+
+  it('should unblock user', async () => {
+    const adminUpdateUser = jest.fn(() => Promise.resolve());
+    const mockDeleteUser = jest.fn(() => Promise.resolve());
+
+    render(<AllUsers deleteUser={mockDeleteUser} adminUpdateUser={adminUpdateUser} />);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    fireEvent.click(screen.queryByTestId('atblokuoti'));
+    expect(adminUpdateUser).toHaveBeenCalledWith(
+      'mockedUserId3',
+      'Test3',
+      'mock3@email.com',
+      '+11311111111',
+      'password3',
+      'USER'
+    );
   });
 });

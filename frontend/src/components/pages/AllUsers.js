@@ -16,7 +16,7 @@ import {
 } from '@mantine/core';
 import { IconLockAccess, IconLockAccessOff, IconPencil, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
-import { adminUpdateUser, getAllUsers, getID } from '../api/users-axios';
+import { getAllUsers, getID } from '../api/users-axios';
 import { toast } from 'react-toastify';
 import { useDisclosure } from '@mantine/hooks';
 import styled from 'styled-components';
@@ -64,7 +64,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-export default function AllUsers({ deleteUser }) {
+export default function AllUsers({ deleteUser, adminUpdateUser }) {
   const navigate = useNavigate();
   const { classes } = useStyles();
   const [opened, { open, close }] = useDisclosure(false);
@@ -236,7 +236,10 @@ export default function AllUsers({ deleteUser }) {
                                   withArrow
                                   transitionProps={{ transition: 'pop', duration: 300 }}
                                   color="blue">
-                                  <ActionIcon onClick={() => giveAccess(user)} color="green">
+                                  <ActionIcon
+                                    data-testid="atblokuoti"
+                                    onClick={() => giveAccess(user)}
+                                    color="green">
                                     <IconLockAccess size="1.3rem" stroke={1.5} />
                                   </ActionIcon>
                                 </Tooltip>
@@ -246,7 +249,10 @@ export default function AllUsers({ deleteUser }) {
                                   withArrow
                                   transitionProps={{ transition: 'pop', duration: 300 }}
                                   color="blue">
-                                  <ActionIcon onClick={() => blockAccess(user)} color="red">
+                                  <ActionIcon
+                                    data-testid="blokuoti"
+                                    onClick={() => blockAccess(user)}
+                                    color="red">
                                     <IconLockAccessOff size="1.3rem" stroke={1.5} />
                                   </ActionIcon>
                                 </Tooltip>

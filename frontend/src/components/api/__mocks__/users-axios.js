@@ -26,6 +26,7 @@ export const getAllUsers = async () => {
       username: 'Test1',
       email: 'mock@email.com',
       phone: '+11111111111',
+      password: 'password',
       role: 'USER'
     },
     {
@@ -33,7 +34,16 @@ export const getAllUsers = async () => {
       username: 'Test2',
       email: 'mock2@email.com',
       phone: '+11211111111',
+      password: 'password2',
       role: 'ADMIN'
+    },
+    {
+      id: 'mockedUserId3',
+      username: 'Test3',
+      email: 'mock3@email.com',
+      phone: '+11311111111',
+      password: 'password3',
+      role: 'BLOCKED'
     }
   ]);
 };
