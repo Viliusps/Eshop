@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getID, getUser, updateUser } from '../api/users-axios';
+import { getID, getUser } from '../api/users-axios';
 import { Button, Container, PasswordInput, Stack, TextInput, Title } from '@mantine/core';
 import { login } from '../api/token-axios';
 import LoadingWrapper from '../common/LoadingWrapper';
 
-export default function Profile() {
+// eslint-disable-next-line react/prop-types
+export default function Profile({ updateUser }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -123,6 +124,7 @@ export default function Profile() {
             <Container size={520} my={40}>
               <Stack>
                 <TextInput
+                  data-testid="vardas"
                   label="Naujas vartotojo vardas"
                   placeholder="Vartotojo vardas"
                   value={username}
@@ -133,6 +135,7 @@ export default function Profile() {
                   onInput={(e) => e.target.setCustomValidity('')}
                 />
                 <TextInput
+                  data-testid="el_pastas"
                   label="Naujas el. paštas"
                   placeholder="you@gmail.com"
                   value={email}
@@ -143,6 +146,7 @@ export default function Profile() {
                   onInput={(e) => e.target.setCustomValidity('')}
                 />
                 <TextInput
+                  data-testid="tel_nr"
                   label="Naujas tel. nr."
                   placeholder="+37066666666"
                   value={phone}
@@ -153,6 +157,7 @@ export default function Profile() {
                   onInput={(e) => e.target.setCustomValidity('')}
                 />
                 <PasswordInput
+                  data-testid="slaptazodis"
                   label="Naujas slaptažodis"
                   placeholder="Jūsų slaptažodis"
                   onChange={handlePasswordChange}
@@ -162,6 +167,7 @@ export default function Profile() {
                   onInput={(e) => e.target.setCustomValidity('')}
                 />
                 <PasswordInput
+                  data-testid="patvirtinti_slaptazodi"
                   label="Patvirtinti naują slaptažodį"
                   placeholder="Patvirtinti slatažodį"
                   onChange={handleConfPasswordChange}

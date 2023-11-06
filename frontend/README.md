@@ -42,3 +42,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ### `npm run test -- --coverage .`
 
 Generates coverage report.
+
+### `npm run test -- --coverage . --collectCoverageFrom="src/components/pages/**/*.{js,jsx}"`
+
+Coverage report for the `pages` folder

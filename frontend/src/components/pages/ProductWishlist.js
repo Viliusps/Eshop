@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import '../css/Products.css';
-import { getWishlistProductsByUserID, getProductImage } from '../api/products-axios';
 import { Title, Pagination } from '@mantine/core';
 import { getID } from '../api/users-axios';
 import LoadingWrapper from '../common/LoadingWrapper';
@@ -8,7 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import { Buffer } from 'buffer';
 
-export default function ProductWishlist() {
+// eslint-disable-next-line react/prop-types
+export default function ProductWishlist({ getProductImage, getWishlistProductsByUserID }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);

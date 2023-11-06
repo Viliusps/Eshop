@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../css/Products.css';
-import { deleteProduct, getProductImage, getProducts } from '../api/products-axios';
+import { getProductImage, getProducts } from '../api/products-axios';
 import { Button, Divider, Modal, Pagination, Title } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import LoadingWrapper from '../common/LoadingWrapper';
@@ -46,7 +46,8 @@ const Approve = styled(Button)`
   margin-top: 10px;
 `;
 
-export default function AllEditProducts() {
+// eslint-disable-next-line react/prop-types
+export default function AllEditProducts({ deleteProduct }) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

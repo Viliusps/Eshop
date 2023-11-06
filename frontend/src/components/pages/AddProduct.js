@@ -35,10 +35,6 @@ export default function AddProduct() {
   function handleSubmit() {
     let valid = true;
     let regCity = /^[^\d\s!@#$%^&*()+\\[\]{};:'"|\\,.\\/<>?`~=_]+$/;
-    if (description === '') {
-      setDescriptionError('Aprašymas negali būti tuščias');
-      valid = false;
-    }
 
     if (price > 10000) {
       setPriceError('Kaina turi būti žemesnė už 10000 Eur');
@@ -57,11 +53,6 @@ export default function AddProduct() {
 
     if (category === '') {
       setCategoryError('Pasirinkite prekės kategoriją');
-      valid = false;
-    }
-
-    if (city === '') {
-      setCityError('Pasirinkite miestą');
       valid = false;
     }
 

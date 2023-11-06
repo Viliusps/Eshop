@@ -16,7 +16,7 @@ import {
 } from '@mantine/core';
 import { IconLockAccess, IconLockAccessOff, IconPencil, IconTrash } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
-import { adminUpdateUser, deleteUser, getAllUsers, getID } from '../api/users-axios';
+import { getAllUsers, getID } from '../api/users-axios';
 import { toast } from 'react-toastify';
 import { useDisclosure } from '@mantine/hooks';
 import styled from 'styled-components';
@@ -63,7 +63,8 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function AllUsers() {
+// eslint-disable-next-line react/prop-types
+export default function AllUsers({ deleteUser, adminUpdateUser }) {
   const navigate = useNavigate();
   const { classes } = useStyles();
   const [opened, { open, close }] = useDisclosure(false);
@@ -220,6 +221,7 @@ export default function AllUsers() {
                                 transitionProps={{ transition: 'pop', duration: 300 }}
                                 color="blue">
                                 <ActionIcon
+                                  data-testid="istrinti"
                                   onClick={() => {
                                     setDeleteUser(user);
                                     open();
@@ -234,7 +236,10 @@ export default function AllUsers() {
                                   withArrow
                                   transitionProps={{ transition: 'pop', duration: 300 }}
                                   color="blue">
-                                  <ActionIcon onClick={() => giveAccess(user)} color="green">
+                                  <ActionIcon
+                                    data-testid="atblokuoti"
+                                    onClick={() => giveAccess(user)}
+                                    color="green">
                                     <IconLockAccess size="1.3rem" stroke={1.5} />
                                   </ActionIcon>
                                 </Tooltip>
@@ -244,7 +249,10 @@ export default function AllUsers() {
                                   withArrow
                                   transitionProps={{ transition: 'pop', duration: 300 }}
                                   color="blue">
-                                  <ActionIcon onClick={() => blockAccess(user)} color="red">
+                                  <ActionIcon
+                                    data-testid="blokuoti"
+                                    onClick={() => blockAccess(user)}
+                                    color="red">
                                     <IconLockAccessOff size="1.3rem" stroke={1.5} />
                                   </ActionIcon>
                                 </Tooltip>
@@ -265,70 +273,6 @@ export default function AllUsers() {
               position="center"
               style={{ marginTop: '30px', marginBottom: '10px' }}
             />
-          </ScrollArea>
-        </div>
-        <div className={classes.hiddenDesktop}>
-          <ScrollArea>
-            <Table verticalSpacing="sm">
-              <thead>
-                <tr>
-                  <th>Naudotojas</th>
-                  <th>Rolė</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {chunks.length > 0 && (
-                  <>
-                    {chunks[activePage - 1].map((user) => (
-                      <tr key={user.id}>
-                        <td>
-                          <Group spacing="sm">
-                            <Avatar size={30} radius={30} />
-                            <Text fz="sm" fw={500}>
-                              {user.username}
-                            </Text>
-                          </Group>
-                        </td>
-                        <td>
-                          <Badge
-                            color={jobColors[user.role.toLowerCase()]}
-                            variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}>
-                            {user.role}
-                          </Badge>
-                        </td>
-                        <td>
-                          {id !== user.id ? (
-                            <Group spacing={0} position="right">
-                              <ActionIcon onClick={() => navigate('/users/' + user.id)}>
-                                <IconPencil size="1.2rem" stroke={1.5} />
-                              </ActionIcon>
-                              <ActionIcon
-                                onClick={() => {
-                                  setDeleteUser(user);
-                                  open();
-                                }}
-                                color="red">
-                                <IconTrash size="1.2rem" stroke={1.5} />
-                              </ActionIcon>
-                              {user.role === 'BLOCKED' ? (
-                                <ActionIcon onClick={() => giveAccess(user)} color="green">
-                                  <IconLockAccess size="1.2rem" stroke={1.5} />
-                                </ActionIcon>
-                              ) : (
-                                <ActionIcon onClick={() => blockAccess(user)} color="red">
-                                  <IconLockAccessOff size="1.2rem" stroke={1.5} />
-                                </ActionIcon>
-                              )}
-                            </Group>
-                          ) : null}
-                        </td>
-                      </tr>
-                    ))}
-                  </>
-                )}
-              </tbody>
-            </Table>
           </ScrollArea>
         </div>
         <Modal opened={opened} onClose={close} withCloseButton={false} xOffset="0vh" centered>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { deleteProduct, getProduct, updateProduct, getProductImage } from '../api/products-axios';
+import { getProduct, updateProduct, getProductImage } from '../api/products-axios';
 import { Button, Divider, Modal, Select, Textarea, TextInput, Title } from '@mantine/core';
 import { IconCheck, IconCircleX, IconCurrencyEuro, IconTrash } from '@tabler/icons-react';
 import { getID, getRole, getUser } from '../api/users-axios';
@@ -39,7 +39,8 @@ const Approve = styled(Button)`
   margin-top: 10px;
 `;
 
-export default function EditProduct() {
+// eslint-disable-next-line react/prop-types
+export default function EditProduct({ deleteProduct }) {
   const [category, setCategory] = useState('');
   const [imageError, setImageError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ export default function EditProduct() {
   const [price, setPrice] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [categoryError, setCategoryError] = useState('');
+  const [cityError, setCityError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [user, setUser] = useState([]);
   const [image, setImage] = useState(null);
@@ -124,16 +126,7 @@ export default function EditProduct() {
 
   function handleSubmit() {
     let valid = true;
-
-    if (category === '') {
-      setCategoryError('Pasirinkite prekės kategoriją');
-      valid = false;
-    }
-
-    if (description === '') {
-      setDescriptionError('Aprašymas negali būti tuščias');
-      valid = false;
-    }
+    let regCity = /^[^\d\s!@#$%^&*()+\\[\]{};:'"|\\,.\\/<>?`~=_]+$/;
 
     if (price < 0) {
       setPriceError('Kaina turi būti teigiama');
@@ -142,6 +135,10 @@ export default function EditProduct() {
 
     if (price > 10000) {
       setPriceError('Kaina negali būti didesnė nei 10000 Eur');
+      valid = false;
+    }
+    if (!regCity.test(city)) {
+      setCityError('Neteisingai įvestas miestas');
       valid = false;
     }
 
@@ -223,6 +220,7 @@ export default function EditProduct() {
               </Title>
               <br />
               <Switch
+                data-testid="paslepti"
                 checked={checked}
                 label="Paslėpti?"
                 description="Paslėpta prekė tampa nematoma kitiems svetainės naudotojams"
@@ -231,6 +229,7 @@ export default function EditProduct() {
                 }}
               />
               <TextInput
+                data-testid="prekes_pavadinimas"
                 label="Prekės pavadinimas"
                 placeholder="Prekės pavadinimas"
                 value={name}
@@ -242,6 +241,7 @@ export default function EditProduct() {
                 onInput={(e) => e.target.setCustomValidity('')}
               />
               <TextInput
+                data-testid="prekes_kaina"
                 type="number"
                 label="Prekės kaina"
                 placeholder="Prekės kaina"
@@ -257,6 +257,7 @@ export default function EditProduct() {
                 onInput={(e) => e.target.setCustomValidity('')}
               />
               <Select
+                data-testid="prekes_bukle"
                 label="Prekės būklė"
                 placeholder="Pasirinkite"
                 value={status}
@@ -265,6 +266,7 @@ export default function EditProduct() {
                 required
               />
               <Select
+                data-testid="kategorija"
                 label="Kategorija"
                 placeholder="Pasirinkite"
                 data={Object.values(productCategories)}
@@ -289,9 +291,11 @@ export default function EditProduct() {
                 </>
               ) : null}
               <TextInput
+                data-testid="miestas"
                 label="Miestas"
                 placeholder="Miestas"
                 value={city}
+                error={cityError}
                 onChange={(e) => {
                   setCity(e.target.value);
                 }}
@@ -307,6 +311,7 @@ export default function EditProduct() {
                   setDescriptionError('');
                   setDescription(e.target.value);
                 }}
+                data-testid="prekes_aprasymas"
                 placeholder="Prekės aprašymas"
                 label="Aprašymas"
                 autosize
@@ -322,6 +327,7 @@ export default function EditProduct() {
             </div>
             <div style={{ margin: 'auto' }}>
               <StyledButton
+                data-testid="atsaukti"
                 className="button"
                 leftIcon={<IconCircleX />}
                 color="indigo"
@@ -332,6 +338,7 @@ export default function EditProduct() {
                 Atšaukti
               </StyledButton>
               <StyledButton
+                data-testid="istrinti"
                 className="button"
                 leftIcon={<IconTrash />}
                 color="red"
@@ -354,7 +361,13 @@ export default function EditProduct() {
             </div>
           </div>
         </form>
-        <Modal opened={opened} onClose={close} withCloseButton={false} xOffset="0vh" centered>
+        <Modal
+          data-testid="modal"
+          opened={opened}
+          onClose={close}
+          withCloseButton={false}
+          xOffset="0vh"
+          centered>
           <h2 style={{ textAlign: 'center' }}>
             Ar tikrai norite ištrinti
             <br />
