@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.pvp.eshop.auth.AuthenticationService;
+import com.pvp.eshop.config.Generated;
 import com.pvp.eshop.model.User;
 import com.pvp.eshop.service.UserService;
 import jakarta.validation.Valid;
@@ -79,6 +80,7 @@ public class UserController {
         }
     }
 
+    @Generated
     @PostMapping("/decode")
     public ResponseEntity<String> decode(
         @RequestBody String request
@@ -90,6 +92,7 @@ public class UserController {
         return ResponseEntity.ok(role);
     }
 
+    @Generated
     @PostMapping("/getId")
     public ResponseEntity<String> decodeId(
             @RequestBody String request

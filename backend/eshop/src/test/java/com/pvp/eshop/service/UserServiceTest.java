@@ -108,7 +108,6 @@ public class UserServiceTest {
 
         assertEquals("newUser", result.getUsername());
         assertEquals("newPassword", result.getPassword());
-        // You can add more assertions as needed.
     }
     @Test
     public void testComparePasswords_IncorrectPassword() {

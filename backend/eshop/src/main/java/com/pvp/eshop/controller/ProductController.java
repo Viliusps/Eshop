@@ -3,6 +3,7 @@ package com.pvp.eshop.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.pvp.eshop.config.Generated;
 import com.pvp.eshop.model.Product;
 import com.pvp.eshop.model.requests.FilterRequest;
 import com.pvp.eshop.model.requests.ProductRequest;
@@ -63,12 +64,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid ProductRequest request) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest request) {
         return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @Valid ProductRequest request) {
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @Valid @RequestBody ProductRequest request) {
         if (productService.existsProduct(id)) {
             return new ResponseEntity<>(productService.updateProduct(id, request), HttpStatus.OK);
         } else {
@@ -88,6 +89,7 @@ public class ProductController {
         }
     }
 
+    @Generated
     @GetMapping("/getImage/{id}")
     public ResponseEntity<ByteArrayResource> downloadImage(@PathVariable("id") String id) throws IOException {
         String path = "backend/eshop/src/main/resources/assets/products/" + id;

@@ -89,7 +89,6 @@
 						<exclude>com/pvp/eshop/model/**</exclude>
 						<exclude>com/pvp/eshop/model/requests/**</exclude>
 						<exclude>com/pvp/eshop/config/**</exclude>
-						<exclude>com/pvp/eshop/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

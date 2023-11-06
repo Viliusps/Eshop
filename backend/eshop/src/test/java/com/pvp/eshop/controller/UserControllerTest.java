@@ -1,147 +1,344 @@
 package com.pvp.eshop.controller;
 
-import com.pvp.eshop.auth.AuthenticationService;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.pvp.eshop.model.Role;
 import com.pvp.eshop.model.User;
-import com.pvp.eshop.service.UserService;
+import com.pvp.eshop.repository.UserRepository;
+import com.pvp.eshop.testutils.DatabaseTestDataCleaner;
+import com.pvp.eshop.testutils.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
+@IntegrationTest
 public class UserControllerTest {
-
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private AuthenticationService authService;
-
-    private UserController userController;
+    @Autowired TestRestTemplate restTemplate;
+    @Autowired DatabaseTestDataCleaner databaseTestDataCleaner;
+    @Autowired UserRepository userRepository;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        userController = new UserController(userService, authService);
+    public void init() {
+        databaseTestDataCleaner.cleanUpTestData();
     }
 
     @Test
     public void getAllUsers_shouldReturnAllUsers() {
-        // Mock the UserService to return a list of users
-        when(userService.getAllUsers()).thenReturn(List.of(new User(), new User()));
+        var users = List.of(
+                User.builder()
+                    .username("TestUsername")
+                    .email("TestEmail@gmail.com")
+                    .password("TestPassword")
+                    .phone("TestPhone")
+                    .role(Role.ADMIN)
+                    .build(),
+                User.builder()
+                    .username("TestUsername1")
+                    .email("TestEmail1@gmail.com")
+                    .password("TestPassword1")
+                    .phone("TestPhone1")
+                    .role(Role.USER)
+                    .build());
+        userRepository.saveAll(users);
 
-        ResponseEntity<List<User>> response = userController.getAllUsers();
+        var response = restTemplate.getForEntity("/api/v1/users", User[].class);
+        var object = response.getBody();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().size());
+        assertThat(object).isNotNull();
+        assertThat(object.length).isEqualTo(2);
+        assertThat(object[0].getUsername()).isEqualTo(users.get(0).getUsername());
+        assertThat(object[1].getUsername()).isEqualTo(users.get(1).getUsername());
     }
 
     @Test
-    public void getUserByIdExists_shouldReturnUserByIdIfExists() {
-        long userId = 1L;
-        User user = new User();
-        when(userService.existsUser(userId)).thenReturn(true);
-        when(userService.getUserById(userId)).thenReturn(user);
+    public void getAllUsers_shouldReturnOkStatus() {
+        var users = List.of(
+                User.builder()
+                        .username("TestUsername")
+                        .email("TestEmail@gmail.com")
+                        .password("TestPassword")
+                        .phone("TestPhone")
+                        .role(Role.ADMIN)
+                        .build(),
+                User.builder()
+                        .username("TestUsername1")
+                        .email("TestEmail1@gmail.com")
+                        .password("TestPassword1")
+                        .phone("TestPhone1")
+                        .role(Role.USER)
+                        .build());
+        userRepository.saveAll(users);
 
-        ResponseEntity<User> response = userController.getUserById(userId);
+        var response = restTemplate.getForEntity("/api/v1/users", User[].class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(user, response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getUserById_shouldReturnNotFoundForUserByIdIfNotExists() {
-        long userId = 1L;
-        when(userService.existsUser(userId)).thenReturn(false);
+    public void getUserById_whenUserExists_shouldReturnUser() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
 
-        ResponseEntity<User> response = userController.getUserById(userId);
+        var response = restTemplate.getForEntity("/api/v1/users/"+userResponse.getId(), User.class);
+        var object = response.getBody();
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertThat(object).isNotNull();
+        assertThat(object.getUsername()).isEqualTo(user.getUsername());
+    }
+
+    @Test
+    public void getUserById_whenUserExists_shouldReturnOkStatus() {
+        var user = User.builder()
+                        .username("TestUsername")
+                        .email("TestEmail@gmail.com")
+                        .password("TestPassword")
+                        .phone("TestPhone")
+                        .role(Role.ADMIN)
+                        .build();
+        var userResponse = userRepository.save(user);
+
+        var response = restTemplate.getForEntity("/api/v1/users/"+userResponse.getId(), User.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void getUserById_whenUserDoesNotExist_shouldReturnNotFoundStatus() {
+        var response = restTemplate.getForEntity("/api/v1/users/1", User[].class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void createUser_shouldCreateUser() {
-        User newUser = new User();
-        when(userService.createUser(newUser)).thenReturn(newUser);
+        var request = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .build();
 
-        ResponseEntity<User> response = userController.createUser(newUser);
+        restTemplate.postForEntity("/api/v1/users", request, User.class);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(newUser, response.getBody());
+        var response = userRepository.findAll();
+
+        assertThat(response.size()).isEqualTo(1);
+        assertThat(response.get(0).getUsername()).isEqualTo("TestUsername");
     }
 
     @Test
-    public void updateUser_shouldUpdateUserIfExists() {
-        long userId = 1L;
-        User updatedUser = new User();
-        when(userService.existsUser(userId)).thenReturn(true);
-        when(userService.updateUser(userId, updatedUser)).thenReturn(updatedUser);
+    public void createUser_shouldReturnCreatedStatus() {
+        var request = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .build();
 
-        ResponseEntity<User> response = userController.updateUser(userId, updatedUser);
+        var response = restTemplate.postForEntity("/api/v1/users", request, User.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedUser, response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    public void updateUser_shouldReturnNotFoundForUpdateUserIfNotExists() {
-        long userId = 1L;
-        when(userService.existsUser(userId)).thenReturn(false);
+    public void updateUser_whenUserExists_shouldUpdateUser() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
 
-        ResponseEntity<User> response = userController.updateUser(userId, new User());
+        var request = User.builder()
+                .username("ChangedUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        restTemplate.put("/api/v1/users/" + userResponse.getId(), request);
+
+        var response = userRepository.findAll();
+
+        assertThat(response.size()).isEqualTo(1);
+        assertThat(response.get(0).getUsername()).isEqualTo("ChangedUsername");
     }
 
     @Test
-    public void adminUpdateUser_shouldAdminUpdateUserIfExists() {
-        long userId = 1L;
-        User updatedUser = new User();
-        when(userService.existsUser(userId)).thenReturn(true);
-        when(userService.adminUpdateUser(userId, updatedUser)).thenReturn(updatedUser);
+    public void updateUser_whenUserExists_shouldReturnOkStatus() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
 
-        ResponseEntity<User> response = userController.adminUpdateUser(userId, updatedUser);
+        var request = User.builder()
+                .username("ChangedUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedUser, response.getBody());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<User> entity = new HttpEntity<>(request, headers);
+
+        var response = restTemplate.exchange("/api/v1/users/" + userResponse.getId(), HttpMethod.PUT, entity, User.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void adminUpdateUser_shouldReturnNotFoundForAdminUpdateUserIfNotExists() {
-        long userId = 1L;
-        when(userService.existsUser(userId)).thenReturn(false);
+    public void updateUser_whenUserExists_shouldReturnNotFoundStatus() {
+        var request = User.builder()
+                .username("ChangedUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
 
-        ResponseEntity<User> response = userController.adminUpdateUser(userId, new User());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        HttpEntity<User> entity = new HttpEntity<>(request, headers);
+
+        var response = restTemplate.exchange("/api/v1/users/1", HttpMethod.PUT, entity, User.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    public void deleteUser_shouldDeleteUserIfExists() {
-        long userId = 1L;
-        when(userService.existsUser(userId)).thenReturn(true);
+    public void adminUpdateUser_whenUserExists_shouldUpdateUser() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
 
-        ResponseEntity<HttpStatus> response = userController.deleteUser(userId);
+        var request = User.builder()
+                .username("ChangedUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(userService, times(1)).deleteUser(userId);
+        restTemplate.put("/api/v1/users/admin/" + userResponse.getId(), request);
+
+        var response = userRepository.findAll();
+
+        assertThat(response.size()).isEqualTo(1);
+        assertThat(response.get(0).getUsername()).isEqualTo("ChangedUsername");
     }
 
     @Test
-    public void deleteUser_shouldReturnNotFoundForDeleteUserIfNotExists() {
-        long userId = 1L;
-        when(userService.existsUser(userId)).thenReturn(false);
+    public void adminUpdateUser_whenUserExists_shouldReturnOkStatus() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
 
-        ResponseEntity<HttpStatus> response = userController.deleteUser(userId);
+        var request = User.builder()
+                .username("ChangedUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(userService, never()).deleteUser(userId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<User> entity = new HttpEntity<>(request, headers);
+
+        var response = restTemplate.exchange("/api/v1/users/admin/" + userResponse.getId(), HttpMethod.PUT, entity, User.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void adminUpdateUser_whenUserExists_shouldReturnNotFoundStatus() {
+        var request = User.builder()
+                .username("ChangedUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<User> entity = new HttpEntity<>(request, headers);
+
+        var response = restTemplate.exchange("/api/v1/users/admin/1", HttpMethod.PUT, entity, User.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void deleteUser_whenUserExists_shouldDeleteUser() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
+
+        restTemplate.delete("/api/v1/users/"+userResponse.getId());
+
+        var response = userRepository.findAll();
+
+        assertThat(response).isEmpty();
+    }
+
+    @Test
+    public void deleteUser_whenUserExists_shouldReturnNoContentStatus() {
+        var user = User.builder()
+                .username("TestUsername")
+                .email("TestEmail@gmail.com")
+                .password("TestPassword")
+                .phone("TestPhone")
+                .role(Role.ADMIN)
+                .build();
+        var userResponse = userRepository.save(user);
+
+        var response = restTemplate.exchange("/api/v1/users/" + userResponse.getId(), HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    public void deleteUser_whenDoesNotExist_shouldReturnNotFoundStatus() {
+        var response = restTemplate.exchange("/api/v1/users/1", HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 }
