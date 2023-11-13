@@ -46,3 +46,10 @@ Generates coverage report.
 ### `npm run test -- --coverage . --collectCoverageFrom="src/components/pages/**/*.{js,jsx}"`
 
 Coverage report for the `pages` folder
+
+### SonarQube
+
+1. Use `docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest`
+2. Open `localhost:9000` and login with admin:admin
+3. Run `npm install -g sonarqube-scanner`
+4. Execute analysis `sonar-scanner -D sonar.login=admin -D sonar.password=<PASSWORD>`

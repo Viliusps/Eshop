@@ -29,3 +29,9 @@ To add local configuration right click on `checkstyle.xml` file and click
 Use `mvn test` to run all tests.
 Use `mvn verify` to generate jacoco coverage report. The report can be found
 in `backend/eshop/target/site/jacoco/index.html`
+
+## Running SonarQube locally
+1. Use `docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest`
+2. Open `localhost:9000` and login with admin:admin
+3. Change password and then use: `mvn clean verify sonar:sonar -D sonar.login=admin -D sonar.password=<PASSWORD>`
+4. After build finishes go back to `localhost:9000`
