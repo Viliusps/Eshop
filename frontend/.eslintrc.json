@@ -14,7 +14,7 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "linebreak-style": ["error", "unix"],
-    "eslint-custom-plugin/lowercaseFunctions": "error"
+    "eslint-custom-plugin/noNumbersInVariables": "error"
   },
   "settings": {
     "react": {

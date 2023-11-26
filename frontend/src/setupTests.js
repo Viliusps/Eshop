@@ -4,6 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
+// eslint-disable-next-line no-undef
 global.ResizeObserver = require('resize-observer-polyfill');
 
 jest.mock('./components/api/comments-axios.js');

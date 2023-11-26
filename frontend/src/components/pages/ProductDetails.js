@@ -48,10 +48,10 @@ export default function ProductDetails() {
           });
         });
         getProductImage(data.id).then((image) => {
-          const base64String = `data:image/*;base64,${Buffer.from(image, 'binary').toString(
+          const imageString = `data:image/*;base64,${Buffer.from(image, 'binary').toString(
             'base64'
           )}`;
-          setImage(base64String);
+          setImage(imageString);
         });
       })
       .catch((error) => {

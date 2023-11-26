@@ -1,5 +1,6 @@
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import React, { useState, useRef, useCallback } from 'react';
+// eslint-disable-next-line no-undef
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 export default function Map(data) {
