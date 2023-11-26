@@ -10,10 +10,11 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "eslint-custom-plugin"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "linebreak-style": ["error", "unix"]
+    "linebreak-style": ["error", "unix"],
+    "eslint-custom-plugin/lowercaseFunctions": "error"
   },
   "settings": {
     "react": {
