@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 
 import com.pvp.eshop.config.Generated;
 import com.pvp.eshop.model.Product;
@@ -81,8 +84,15 @@ public class ProductService {
     }
 
     public Product getProductById(long id) {
-        return productRepository.findById(id).get();
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if (!optionalProduct.isEmpty()) {
+            return optionalProduct.get();
+        } else {
+            throw new NoSuchElementException("Product not found with id: " + id);
+        }
     }
+
     public List<Product> getProductsByUserId(long id) {
         return productRepository.productsByUser(id);
     }
@@ -160,7 +170,7 @@ public class ProductService {
     }
 
     @Generated
-    private void deleteRecursive(File file) {
+    private boolean deleteRecursive(File file) {
         if (file.isDirectory()) {
             File[] children = file.listFiles();
             if (children != null) {
@@ -169,7 +179,11 @@ public class ProductService {
                 }
             }
         }
-        file.delete();
+        boolean deleted = file.delete();
+        if (!deleted) {
+            return false;
+        }
+        return true;
     }
 
     public Float findMaxPrice() {
