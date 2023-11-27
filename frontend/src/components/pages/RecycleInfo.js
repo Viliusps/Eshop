@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Anchor } from '@mantine/core';
 import { getLocations } from '../api/locations-axios';
 import LoadingWrapper from '../common/LoadingWrapper';
-import Map from '../utils/Map';
+import RecycleMap from '../utils/RecycleMap';
 
 export default function RecycleInfo() {
   const [locations, setLocations] = useState([]);
@@ -58,7 +58,7 @@ export default function RecycleInfo() {
             atliekos.lt
           </Anchor>
         </p>
-        <Map data={locations} style={mapStyle} />
+        <RecycleMap data={locations} style={mapStyle} />
       </LoadingWrapper>
     </div>
   );
