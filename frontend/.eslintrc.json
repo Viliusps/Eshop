@@ -10,10 +10,11 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "custom"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "linebreak-style": ["error", "unix"]
+    "linebreak-style": ["error", "unix"],
+    "custom/noNumbersInVariables": "error"
   },
   "settings": {
     "react": {

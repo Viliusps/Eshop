@@ -1,5 +1,6 @@
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+// eslint-disable-next-line no-undef
 const URL = process.env.REACT_APP_API_URL;
 
 export const getProducts = async () => {
