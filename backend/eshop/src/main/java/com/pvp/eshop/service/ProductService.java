@@ -180,10 +180,7 @@ public class ProductService {
             }
         }
         boolean deleted = file.delete();
-        if (!deleted) {
-            return false;
-        }
-        return true;
+        return deleted;
     }
 
     public Float findMaxPrice() {

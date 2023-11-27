@@ -119,7 +119,7 @@ public class ReactionControllerTest {
 
         assertThat(object).isNotNull();
         assertThat(object.length).isEqualTo(1);
-        assertThat(object[0]).isEqualTo(commentResponse.getId());
+        assertThat((long)object[0]).isEqualTo(commentResponse.getId());
     }
 
     @Test
