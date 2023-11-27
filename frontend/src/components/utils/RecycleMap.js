@@ -3,7 +3,7 @@ import React, { useState, useRef, useCallback } from 'react';
 // eslint-disable-next-line no-undef
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-export default function Map(data) {
+export default function RecycleMap(data) {
   const locations = data.data;
   const mapRef = useRef(null);
   const [selectedLocation, setSelectedLocation] = useState(null);

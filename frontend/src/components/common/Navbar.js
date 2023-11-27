@@ -180,7 +180,7 @@ export function NavBar() {
                     Pridėti skelbimą
                   </Button>
                 </Link>
-                <div onClick={toggleDrawer}>
+                <div onKeyDown={toggleDrawer}>
                   <Button onClick={() => Logout()}>Atsijungti</Button>
                 </div>
               </Group>
