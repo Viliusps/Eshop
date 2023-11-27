@@ -35,12 +35,9 @@ public class UserService {
     }
 
     public User getUserById(long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new EntityNotFoundException("User not found with id " + id);
-        }     
+        var user = userRepository.findById(id);
+
+        return user.orElse(null);
     }
 
     public User createUser(User user) {
@@ -63,13 +60,20 @@ public class UserService {
     public boolean existsUser(long id) {
         return userRepository.existsById(id);
     }
+
     public User userByUsername(String username) {
         return userRepository.userByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public User updateUser(Long id, User user) {
-        User userFromDb = userRepository.findById(id).get();
+        var optionalUser = userRepository.findById(id);
+        var userFromDb = optionalUser.orElse(null);
+
+        if (userFromDb == null) {
+            return null;
+        }
+
         if (!Objects.equals(userFromDb.getUsername(), user.getUsername()) &&
                 userRepository.userByUsername(user.getUsername()).isPresent()) {
             return null;
@@ -85,7 +89,13 @@ public class UserService {
     }
 
     public User adminUpdateUser(Long id, User user) {
-        User userFromDb = userRepository.findById(id).get();
+        var optionalUser = userRepository.findById(id);
+        var userFromDb = optionalUser.orElse(null);
+
+        if (userFromDb == null) {
+            return null;
+        }
+
         if (!Objects.equals(userFromDb.getUsername(), user.getUsername()) &&
                 userRepository.userByUsername(user.getUsername()).isPresent()) {
             return null;

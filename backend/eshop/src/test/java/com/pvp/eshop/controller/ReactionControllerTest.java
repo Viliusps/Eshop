@@ -22,12 +22,18 @@ import java.util.HashMap;
 
 @IntegrationTest
 public class ReactionControllerTest {
-    @Autowired TestRestTemplate restTemplate;
-    @Autowired DatabaseTestDataCleaner databaseTestDataCleaner;
-    @Autowired UserRepository userRepository;
-    @Autowired ProductRepository productRepository;
-    @Autowired CommentRepository commentRepository;
-    @Autowired ReactionRepository reactionRepository;
+    @Autowired
+    TestRestTemplate restTemplate;
+    @Autowired
+    DatabaseTestDataCleaner databaseTestDataCleaner;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    CommentRepository commentRepository;
+    @Autowired
+    ReactionRepository reactionRepository;
 
     @BeforeEach
     public void init() {
@@ -92,7 +98,7 @@ public class ReactionControllerTest {
         var response = restTemplate.postForEntity("/api/v1/reactions/likes", request, Reaction.class);
 
         assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode().value()).isEqualTo(HttpStatus.CREATED.value());
     }
 
     @Test
@@ -119,7 +125,7 @@ public class ReactionControllerTest {
 
         assertThat(object).isNotNull();
         assertThat(object.length).isEqualTo(1);
-        assertThat((long)object[0]).isEqualTo(commentResponse.getId());
+        assertThat((long) object[0]).isEqualTo(commentResponse.getId());
     }
 
     @Test
@@ -144,6 +150,6 @@ public class ReactionControllerTest {
         var response = restTemplate.postForEntity("/api/v1/reactions/likedByUser", request, Integer[].class);
 
         assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
     }
 }
