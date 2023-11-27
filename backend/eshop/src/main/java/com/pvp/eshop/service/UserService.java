@@ -6,10 +6,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.pvp.eshop.model.Role;
 import com.pvp.eshop.model.User;
 import com.pvp.eshop.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
